@@ -9,10 +9,9 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: side_road
   m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
-  m_ValidKeywords:
-  - _EMISSION
+  m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 2
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -76,6 +75,6 @@ Material:
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 0.735849, g: 0.6557008, b: 0.2950338, a: 1}
+    - _Color: {r: 0.8198883, g: 0.8584906, b: 0.4008989, a: 1}
+    - _EmissionColor: {r: 1, g: 0.81415933, b: 0, a: 1}
   m_BuildTextureStacks: []
