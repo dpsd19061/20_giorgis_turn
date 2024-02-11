@@ -9,38 +9,61 @@ public class CarController : MonoBehaviour
     Rigidbody rb;
     public float acc = 15f;
     public float speed;
-    public float Rspeed = 50f;
+    private float Rspeed = 55f;
     public float nitro = 1;
     public GameObject BoostGauge;
+    public GameObject carSprite;
 
-    float gear1 = 15f;
-    float gear2 = 40f;
-    float gear3 = 80f;
-    float gear4 = 100f;
-    float reverse = 10f;
+    float gear1 = 55;
+    float gear2 = 171;
+    float gear3 = 342;
+    float gear4 = 440;
+    float reverse = 40;
 
     bool boostIsAvailable = false;
-    float boostIncrease = 1.2f;
+    float boostIncrease = 1.3f;
 
     int displaySpeed;
     public TMP_Text speedometer;
 
     bool timingHasStarted = false;
+    bool raceFinished = false;
     float time = 0;
     float sec = 0;
+    public float timeInSeconds = 0;
     int minutes = 0;
     public TMP_Text timerSec;
     public TMP_Text timerMin;
 
+    public Animator animator;
+    public bool steering = false;
+
+    public AudioSource engine;
+    public AudioSource nitrous;
+    public AudioSource crash;
+
+    public GameObject goldS;
+    public GameObject silverS;
+    public GameObject bronzeS;
+    public GameObject failS;
+
+    public GameObject Scene1;
+    public GameObject Scene2;
+    public GameObject Scene3;
+
+    public static bool disablePause = true;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        Time.timeScale = 0f;
     }
 
     void Update()
     {
         speed = rb.velocity.magnitude;
         
+        //Changes the acceleration depending the speed
         if(speed <= 8f)
         {
             if (boostIsAvailable)
@@ -86,9 +109,25 @@ public class CarController : MonoBehaviour
             }
         }
 
-        if (speed > 0.01f)
+        //Steering and animation steering only when the car has some speed
+        if (speed > 1f)
         {
             rb.transform.Rotate(0, Input.GetAxis("Horizontal") * Rspeed * Time.deltaTime, 0);
+
+            if (Input.GetKey(KeyCode.A))
+            {
+                carSprite.transform.localEulerAngles = new Vector3(0, 180, 0);
+                steering = true;
+            }
+            else if (Input.GetKey(KeyCode.D))
+            {
+                carSprite.transform.localEulerAngles = new Vector3(0, 0, 0);
+                steering = true;
+            }
+            else
+            {
+                steering = false;
+            }
         }
 
         if(Input.GetAxis("Vertical") < 0)
@@ -96,13 +135,19 @@ public class CarController : MonoBehaviour
             acc = reverse;
         }
 
-
+        //Displaying speed on the speedometer
         displaySpeed = (int)(speed * 3.6f);
         speedometer.text = displaySpeed.ToString();
+
+        animator.SetBool("Steering", steering);
 
         Boost();
 
         Timing();
+
+        EngineRevSound();
+
+        PrizeScreen();
     }
 
     void FixedUpdate()
@@ -110,6 +155,7 @@ public class CarController : MonoBehaviour
         rb.velocity += rb.transform.forward * Input.GetAxis("Vertical") * acc * Time.fixedDeltaTime;
     }
 
+    //Boost Function
     void Boost()
     {
         if (Input.GetKey(KeyCode.Space) && nitro > 0)
@@ -122,6 +168,15 @@ public class CarController : MonoBehaviour
             boostIsAvailable = false;
         }
 
+        if (Input.GetKeyDown(KeyCode.Space) && nitro > 0)
+        {
+            nitrous.Play();
+        }
+        else if (Input.GetKeyUp(KeyCode.Space))
+        {
+            nitrous.Stop();
+        }
+
         if (nitro < 1)
         {
             nitro += 0.05f * Time.deltaTime;
@@ -129,11 +184,13 @@ public class CarController : MonoBehaviour
         }
     }
 
+    //Function for timing the car
     void Timing()
     {
         if (timingHasStarted)
         {
             time = Time.deltaTime;
+            timeInSeconds += time;
             sec += time;
             if(sec > 60f)
             {
@@ -145,11 +202,126 @@ public class CarController : MonoBehaviour
         }
     }
 
+    //Function for giving prizes depending on the time
+    void PrizeScreen()
+    {
+        if (TrackSelection.selectedTrack == 1)
+        {
+            if ((raceFinished == true) && (timeInSeconds <= 85f))
+            {
+                goldS.SetActive(true);
+                Time.timeScale = 0f;
+                nitrous.Stop();
+                engine.Stop();
+            }
+            else if ((raceFinished == true) && (timeInSeconds <= 90f))
+            {
+                silverS.SetActive(true);
+                Time.timeScale = 0f;
+                nitrous.Stop();
+                engine.Stop();
+            }
+            else if ((raceFinished == true && timeInSeconds <= 95f))
+            {
+                bronzeS.SetActive(true);
+                Time.timeScale = 0f;
+                nitrous.Stop();
+                engine.Stop();
+            }
+            else if ((raceFinished == true && timeInSeconds > 95f))
+            {
+                failS.SetActive(true);
+                Time.timeScale = 0f;
+                nitrous.Stop();
+                engine.Stop();
+            }
+        }
+        else if (TrackSelection.selectedTrack == 2)
+        {
+            if ((raceFinished == true) && (timeInSeconds <= 170f))
+            {
+                goldS.SetActive(true);
+                Time.timeScale = 0f;
+                nitrous.Stop();
+                engine.Stop();
+            }
+            else if ((raceFinished == true) && (timeInSeconds <= 180f))
+            {
+                silverS.SetActive(true);
+                Time.timeScale = 0f;
+                nitrous.Stop();
+                engine.Stop();
+            }
+            else if ((raceFinished == true && timeInSeconds <= 190f))
+            {
+                bronzeS.SetActive(true);
+                Time.timeScale = 0f;
+                nitrous.Stop();
+                engine.Stop();
+            }
+            else if ((raceFinished == true && timeInSeconds > 190f))
+            {
+                failS.SetActive(true);
+                Time.timeScale = 0f;
+                nitrous.Stop();
+                engine.Stop();
+            }
+        }
+        else if (TrackSelection.selectedTrack == 3)
+        {
+            if ((raceFinished == true) && (timeInSeconds <= 510f))
+            {
+                goldS.SetActive(true);
+                Time.timeScale = 0f;
+                nitrous.Stop();
+                engine.Stop();
+            }
+            else if ((raceFinished == true) && (timeInSeconds <= 540f))
+            {
+                silverS.SetActive(true);
+                Time.timeScale = 0f;
+                nitrous.Stop();
+                engine.Stop();
+            }
+            else if ((raceFinished == true && timeInSeconds <= 570f))
+            {
+                bronzeS.SetActive(true);
+                Time.timeScale = 0f;
+                nitrous.Stop();
+                engine.Stop();
+            }
+            else if ((raceFinished == true && timeInSeconds > 570f))
+            {
+                failS.SetActive(true);
+                Time.timeScale = 0f;
+                nitrous.Stop();
+                engine.Stop();
+            }
+        }
+    }
+
+    //Sound for engine
+    void EngineRevSound()
+    {
+        engine.pitch = (rb.velocity.magnitude/45) + 0.3f;
+    }
+
     void OnCollisionEnter(Collision collision)
     {
+        if (collision.gameObject.tag == "borders")
+        {
+            crash.Play();
+        }
+
         if (collision.gameObject.tag == "sideroad")
         {
-            rb.drag += 0.2f;
+            rb.drag += 1f;
+        }
+
+        if (collision.gameObject.tag == "finishBound")
+        {
+            raceFinished = true;
+            disablePause = true;
         }
     }
 
@@ -157,7 +329,7 @@ public class CarController : MonoBehaviour
     {
         if (other.gameObject.tag == "puddle")
         {
-            rb.drag += 3f;
+            rb.drag += 6f;
         }
 
         if (other.gameObject.tag == "start")
@@ -175,7 +347,7 @@ public class CarController : MonoBehaviour
     {
         if (collision.gameObject.tag == "sideroad")
         {
-            rb.drag -= 0.2f;
+            rb.drag -= 1f;
         }
     }
 
@@ -183,7 +355,26 @@ public class CarController : MonoBehaviour
     {
         if (other.gameObject.tag == "puddle")
         {
-            rb.drag -= 3f;
+            rb.drag -= 6f;
         }
+    }
+
+    public void continue1()
+    {
+        Scene1.SetActive(false);
+        Scene2.SetActive(true);
+    }
+
+    public void continue2()
+    {
+        Scene2.SetActive(false);
+        Scene3.SetActive(true);
+    }
+
+    public void continue3()
+    {
+        Scene3.SetActive(false);
+        disablePause = false;
+        Time.timeScale = 1f;
     }
 }

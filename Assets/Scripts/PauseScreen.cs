@@ -5,23 +5,32 @@ using UnityEngine.SceneManagement;
 
 public class PauseScreen : MonoBehaviour
 {
+    //Main function of this script is that pauses the game and opens the pause menu
     public bool isGamePaused = false;
+
+    public GameObject engine;
+    public GameObject nitrous;
+    public GameObject crash;
 
     [SerializeField] GameObject pauseMenu;
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (CarController.disablePause == false)
         {
-            if (isGamePaused)
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                ResumeGame();
-            }
-            else
-            {
-                PauseGame();
+                if (isGamePaused)
+                {
+                    ResumeGame();
+                }
+                else
+                {
+                    PauseGame();
+                }
             }
         }
+
     }
 
     public void ResumeGame()
@@ -29,6 +38,10 @@ public class PauseScreen : MonoBehaviour
         pauseMenu.SetActive(false);
         Time.timeScale = 1f;
         isGamePaused = false;
+
+        engine.SetActive(true);
+        nitrous.SetActive(true);
+        crash.SetActive(true);
     }
 
     void PauseGame()
@@ -36,14 +49,21 @@ public class PauseScreen : MonoBehaviour
         pauseMenu.SetActive(true);
         Time.timeScale = 0f;
         isGamePaused = true;
+
+        engine.SetActive(false);
+        nitrous.SetActive(false);
+        crash.SetActive(false);
     }
 
+    //Restarts the current track
     public void RestartGame()
     {
 
         pauseMenu.SetActive(false);
         Time.timeScale = 1f;
         isGamePaused = false;
+        CarController.disablePause = true;
+
 
         if (TrackSelection.selectedTrack == 1)
         {
@@ -59,11 +79,13 @@ public class PauseScreen : MonoBehaviour
         }
     }
 
+    //Goes to the starting screen when the player clicks the button quit. It is used during the gameplay
     public void Quit()
     {
         pauseMenu.SetActive(false);
         Time.timeScale = 1f;
         isGamePaused = false;
+        CarController.disablePause = true;
         SceneManager.LoadScene("Main");
     }
 }

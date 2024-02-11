@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class TrackLoader : MonoBehaviour
 {
+    //Loads the track that was chosen
     public void GetInCar()
     {
         if(TrackSelection.selectedTrack == 1)

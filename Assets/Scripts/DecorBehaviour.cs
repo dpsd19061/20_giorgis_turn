@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class DecorBehaviour : MonoBehaviour
 {
-    //public GameObject car;
     public Transform car;
-
+    //For the trees and bushes, so that they always face the car an the camera
     void Update()
     {
-        //transform.Rotate(0, car.transform.rotation.y, 0);
         transform.LookAt(car);
     }
 }

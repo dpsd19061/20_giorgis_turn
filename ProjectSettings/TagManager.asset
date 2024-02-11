@@ -8,11 +8,13 @@ TagManager:
   - puddle
   - start
   - finish
+  - borders
+  - finishBound
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - glow
   - Water
   - UI
   - 

@@ -4,27 +4,24 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneSwitcher : MonoBehaviour
-{//AAAAAAAAAAAAAA
-    //Opens another scene with the game
+{
+    //Loads the track selection scene
     public void StartGame()
     {
         SceneManager.LoadScene("Select Track");
     }
 
+    //Loads the controls scene
     public void Controls()
     {
         SceneManager.LoadScene("Controls");
     }
 
+    //Loads the credits scene
     public void Credits()
     {
         SceneManager.LoadScene("Credits");
     }
-
-    /*public void QuitToMain()
-    {
-        SceneManager.LoadScene("Main");
-    }*/
 
     //Exits game
     public void ExitGame()

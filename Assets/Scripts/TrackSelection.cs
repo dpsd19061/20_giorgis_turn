@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class TrackSelection : MonoBehaviour
 {
+    //Sets what track should be loaded
     public static int selectedTrack = 0;
 
     public void Track1()
